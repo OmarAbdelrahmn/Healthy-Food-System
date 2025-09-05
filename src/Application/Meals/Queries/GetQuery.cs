@@ -1,18 +1,12 @@
-﻿using Application.Items.Queries.GetItem;
-using Domain.Enums;
+﻿using Domain.Enums;
 using ErrorOr;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Application.Meals.Queries.GetQuery;
 
-namespace Application.Meals.Queries;
-public class GetQuery : IRequest<ErrorOr<GetQueryResponse>>{
+namespace Application.Meals.Queries.GetMeal;
 
-public record GetQueryResponse(
+public record GetMealQuery(Guid Id) : IRequest<ErrorOr<GetMealQueryResponse>>;
+
+public record GetMealQueryResponse(
     Guid Id,
     Guid ItemId,
     string ItemName,
@@ -22,7 +16,4 @@ public record GetQueryResponse(
     MealType MealType,
     uint Quantity,
     DateTime CreatedAt
-    );
-
-}
-
+);

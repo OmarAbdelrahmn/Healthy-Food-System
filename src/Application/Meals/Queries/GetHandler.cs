@@ -1,24 +1,22 @@
 ﻿using Application.Interfaces.UnitOfWorkInterfaces;
-using Application.Items.Queries.GetItem;
 using Domain.DErrors;
 using ErrorOr;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Application.Meals.Queries.GetQuery;
+using Microsoft.EntityFrameworkCore;
 
-namespace Application.Meals.Queries;
-internal class GetHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetQuery, ErrorOr<GetQueryResponse>>
+namespace Application.Meals.Queries.GetMeal;
+
+public class GetMealQueryHandler : IRequestHandler<GetMealQuery, ErrorOr<GetMealQueryResponse>>
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public async Task<ErrorOr<GetQueryResponse>> Handle(
-        GetQuery request,
-        CancellationToken cancellationToken
-    )
+    public GetMealQueryHandler(IUnitOfWork unitOfWork)
+    {
+        _unitOfWork = unitOfWork;
+    }
+    public async Task<ErrorOr<GetMealQueryResponse>> Handle(
+        GetMealQuery request,
+        CancellationToken cancellationToken)
     {
         var meal = await _unitOfWork
             .Meals.GetQueryable()
@@ -31,7 +29,7 @@ internal class GetHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetQuery, Er
             return DomainErrors.Meals.MealNotFound(request.Id);
         }
 
-        return new GetQueryResponse(
+        return new GetMealQueryResponse(
             meal.Id,
             meal.ItemId,
             meal.Item.Name,
@@ -44,4 +42,3 @@ internal class GetHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetQuery, Er
         );
     }
 }
-

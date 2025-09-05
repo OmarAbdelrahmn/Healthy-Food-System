@@ -27,7 +27,14 @@ public static class DomainErrors
                 $"Ingredient with id {requestId} not found."
             );
     }
+    public static class Meals
+    {
+        public static Error MealNotFound(Guid id) =>
+            Error.NotFound("Meals.NotFound", $"?????? ???? {id} ??? ??????");
 
+        public static Error MealAlreadyExists(string name) =>
+            Error.Conflict("Meals.AlreadyExists", $"?????? {name} ?????? ??????");
+    }
     public static class Items
     {
         public static Error ExtraItemOptionNotFound(int value) =>

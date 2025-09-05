@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
-namespace Application.Meals.Queries;
-internal class GetQueryRequestValidator
+namespace Application.Meals.Queries.GetMeal;
+
+public class GetMealQueryValidator : AbstractValidator<GetMealQuery>
 {
+    public GetMealQueryValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEqual(Guid.Empty)
+            .WithMessage("معرف الوجبة مطلوب");
+    }
 }

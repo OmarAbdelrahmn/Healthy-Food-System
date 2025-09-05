@@ -22,7 +22,7 @@ public class UnitOfWork : IUnitOfWork
     private IRepository<ShippingAddress, int> _shippingAddressRepository;
     private IRepository<PromoCode, Guid> _promoCodeRepository;
     private IRepository<PromoCodeUsage, Guid> _promoCodeUsageRepository;
-    private IRepository<Meal, Guid> _mealRepository;
+    private IRepository<Meal, Guid> MealsRepository;
     public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;
@@ -32,7 +32,7 @@ public class UnitOfWork : IUnitOfWork
         _itemRepository ??= new Repository<Item, Guid>(_context);
 
     public IRepository<Meal, Guid> Meals =>
-        _mealRepository ??= new Repository<Meal, Guid>(_context);
+        MealsRepository ??= new Repository<Meal, Guid>(_context);
 
     public IRepository<Ingredient, int> Ingredients =>
         _ingredientRepository ??= new Repository<Ingredient, int>(_context);
@@ -67,6 +67,8 @@ public class UnitOfWork : IUnitOfWork
         _promoCodeRepository ??= new Repository<PromoCode, Guid>(_context);
     public IRepository<PromoCodeUsage, Guid> PromoCodeUsages =>
         _promoCodeUsageRepository ??= new Repository<PromoCodeUsage, Guid>(_context);
+
+
     public async Task<int> CompleteAsync()
     {
         return await _context.SaveChangesAsync();

@@ -4,6 +4,8 @@ namespace Application.Interfaces.UnitOfWorkInterfaces;
 
 public interface IUnitOfWork
 {
+    IRepository<Meal, Guid> Meals { get; }
+
     IRepository<Item, Guid> Items { get; }
     IRepository<Ingredient, int> Ingredients { get; }
     IRepository<IngredientChange, int> IngredientChanges { get; }
