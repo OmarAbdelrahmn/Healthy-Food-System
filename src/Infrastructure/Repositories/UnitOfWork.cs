@@ -22,6 +22,7 @@ public class UnitOfWork : IUnitOfWork
     private IRepository<ShippingAddress, int> _shippingAddressRepository;
     private IRepository<PromoCode, Guid> _promoCodeRepository;
     private IRepository<PromoCodeUsage, Guid> _promoCodeUsageRepository;
+    private IRepository<Meal, Guid> _mealRepository;
     public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;
@@ -29,6 +30,9 @@ public class UnitOfWork : IUnitOfWork
 
     public IRepository<Item, Guid> Items =>
         _itemRepository ??= new Repository<Item, Guid>(_context);
+
+    public IRepository<Meal, Guid> Meals =>
+        _mealRepository ??= new Repository<Meal, Guid>(_context);
 
     public IRepository<Ingredient, int> Ingredients =>
         _ingredientRepository ??= new Repository<Ingredient, int>(_context);

@@ -17,7 +17,6 @@
 
     <ItemGroup>
       <Folder Include="Meals\Commands\" />
-      <Folder Include="Meals\Queries\" />
       <Folder Include="Plans\Queries\NewFolder\" />
     </ItemGroup>
 
