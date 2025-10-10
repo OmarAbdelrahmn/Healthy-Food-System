@@ -19,7 +19,8 @@ public class PromoCodeRepository : IPromoCodeRepository
     public async Task<PromoCode?> GetByCodeAsync (string code)
     {
         return await _context.PromoCodes
-            .FirstOrDefaultAsync(pc => pc.Code == code);
+            .AsNoTracking()
+            .FirstOrDefaultAsync(pc => pc.Code == code.ToUpper());
     }
     public async Task<PromoCode?> GetByIdAsync(Guid id)
     {
@@ -30,6 +31,7 @@ public class PromoCodeRepository : IPromoCodeRepository
     public async Task<IEnumerable<PromoCode>> GetAllAsync()
     {
         return await _context.PromoCodes
+            .AsNoTracking()
             .ToListAsync();
     }
 

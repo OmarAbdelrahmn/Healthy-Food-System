@@ -25,4 +25,36 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<ReferralCode> ReferralCodes { get; set; }
     public DbSet<UserPrefernce> UserPrefernces { get; set; }
     public DbSet<SubscriptionCategory> SubscriptionCategories { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        builder.Entity<PromoCode>(entity =>
+        {
+            entity.HasIndex(pc => pc.Id);
+            entity.Property(pc => pc.Code)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            entity.Property(pc => pc.DiscountAmount)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+            entity.Property(pc => pc.DiscountPercentage)
+                    .HasColumnType("decimal(5,2)")
+                    .HasDefaultValue(0);
+            entity.Property(pc => pc.ValidFrom)
+                    .IsRequired();
+            entity.Property(pc => pc.ValidTo)
+                    .IsRequired();
+            entity.Property(pc => pc.MaxUsageCount)
+                    .IsRequired()
+                    .HasDefaultValue(1);
+            entity.Property(pc => pc.CurrentUsageCount)
+                    .IsRequired()
+                    .HasDefaultValue(0);
+            entity.Property(pc => pc.MinimumOrderAmount)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+
+        });
+    }
 }

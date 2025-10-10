@@ -15,4 +15,5 @@ public interface IPromoCodeRepository
     Task UpdateAsync(PromoCode promoCode);
     Task DeleteAsync(PromoCode promoCode);
     Task<bool> ExistsAsync(string code);
+    Task SaveChangesAsync();
 }

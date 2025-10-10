@@ -17,4 +17,8 @@ public interface IPromoCodeService
     Task<PromoCodeApplicationResultDto> ApplyPromoCodeAsync(ApplyPromoCodeDto applyPromoCodeDto);
     Task<PromoCodeDto?> GetPromoCodeAsync(string code);
     Task DeactivatePromoCodeAsync(Guid id);
+    Task<PromoCodeApplicationResultDto> ValidationPromoCodeAsync(ApplyPromoCodeDto applyPromoCodeDto);
+    //Task UpdateUsageAsync(UpdatePromoCodeUsageDto updateDto);
+    Task<bool> PromoCodeExistsAsync(string code);
+    Task UpdateUsageAsync(UpdatePromoCodeUsageDto updateDto);
 }

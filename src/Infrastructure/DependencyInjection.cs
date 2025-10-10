@@ -88,7 +88,6 @@ public static class DependencyInjection
                 }
             );
 
-        services.AddAutoMapper(typeof(PromoCodeProfile).Assembly);
 
         services.AddScoped<IPromoCodeService,PromoCodeService>();
         services.AddScoped<IPromoCodeRepository,PromoCodeRepository>();

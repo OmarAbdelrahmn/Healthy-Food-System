@@ -12,4 +12,5 @@ public class PromoCodeApplicationResultDto
     public decimal DiscountAmount { get; set; }
     public decimal FinalAmount { get; set; }
     public string? ErrorMessage { get; set; }
+    public PromoCodeDto? PromoCode { get; set; }
 }
