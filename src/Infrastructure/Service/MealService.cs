@@ -148,9 +148,9 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
 
     }
 
-    public async Task<Result<MealResponse>> GetByuserIdAsync(string UserId)
+    public async Task<Result<MealResponse>> GetByuserIdAsync(string UserId ,  int id)
     {
-        var meal = await dbContext.Meals.FirstOrDefaultAsync(m => m.UserId == UserId);
+        var meal = await dbContext.Meals.FirstOrDefaultAsync(m => m.UserId == UserId &&m.Id == id);
         
         if (meal == null)
             return Result.Failure<MealResponse>(new Error("NotFound", "meal with this user id not found", StatusCodes.Status404NotFound));

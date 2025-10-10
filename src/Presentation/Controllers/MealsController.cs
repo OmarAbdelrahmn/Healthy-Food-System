@@ -30,11 +30,11 @@ public class MealsController(IMealService service) : ControllerBase
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
 
-    [HttpGet("user")]
-    public async Task<IActionResult> GetByUserIdAsync()
+    [HttpGet("{MealId}/user")]
+    public async Task<IActionResult> GetByUserIdAsync(int MealId)
     {
         var userId = User.GetUserId();
-        var result = await service.GetByuserIdAsync(userId!);
+        var result = await service.GetByuserIdAsync(userId!, MealId);
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
 
