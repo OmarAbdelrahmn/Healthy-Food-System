@@ -98,26 +98,6 @@ public class MealsController(IMealService service) : ControllerBase
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 public static class UserExtensions
 {
     public static string? GetUserId(this ClaimsPrincipal user)

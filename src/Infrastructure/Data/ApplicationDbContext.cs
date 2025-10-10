@@ -1,7 +1,9 @@
 using Domain.Models.Entities;
 using Domain.Models.Identity;
+using Infrastructure.Migrations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace Infrastructure.Data;
 
@@ -25,4 +27,18 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<ReferralCode> ReferralCodes { get; set; }
     public DbSet<UserPrefernce> UserPrefernces { get; set; }
     public DbSet<SubscriptionCategory> SubscriptionCategories { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.Entity<Meal>()
+            .HasOne(m => m.User)
+            .WithMany(u => u.meals)
+            .HasForeignKey(m => m.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+    }
+
+
 }

@@ -10,7 +10,7 @@ public static class SeedMeals
 {
     public static async Task SeedAsync(ApplicationDbContext context)
     {
-       if (await context.Meals.AnyAsync())
+        if (await context.Meals.AnyAsync())
             return;
 
         var meals = new List<Meal>
