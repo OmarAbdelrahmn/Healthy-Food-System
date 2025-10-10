@@ -1,6 +1,7 @@
-using System.Text;
 using Application.Interfaces;
 using Application.Interfaces.UnitOfWorkInterfaces;
+using Application.Mapping;
+using Application.Services;
 using Domain.Interfaces.Repositories;
 using Domain.Models.Entities;
 using Domain.Models.Identity;
@@ -14,6 +15,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
+using AutoMapper;
+
+using System.Text;
 
 namespace Infrastructure;
 
@@ -31,6 +36,9 @@ public static class DependencyInjection
         services.AddSingleton(jwtSettings);
 
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+
+
+
 
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
         services.AddScoped<IMealService,MealService>();
@@ -80,8 +88,10 @@ public static class DependencyInjection
                 }
             );
 
-        services.AddScoped<IPromoCodeRepository, PromoCodeRepository>();
+        services.AddAutoMapper(typeof(PromoCodeProfile).Assembly);
 
+        services.AddScoped<IPromoCodeService,PromoCodeService>();
+        services.AddScoped<IPromoCodeRepository,PromoCodeRepository>();
         services.AddAuthorization();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddHttpContextAccessor();

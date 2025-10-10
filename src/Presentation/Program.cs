@@ -1,14 +1,15 @@
-using System.Reflection;
 using Application;
 using Domain.Models.Identity;
 using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Presentation.Seeding.Foods;
 using Presentation.Seeding.Identity;
 using Presentation.Seeding.PromoCode;
+using System.Reflection;
 
 var corsPolicyName = "AllowAll";
 
