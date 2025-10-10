@@ -31,7 +31,8 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
             SubcategoryId = request.SubcategoryId,
             IngredientId = request.IngredientId,
             DefaultQuantityGrams = request.DefaultQuantityGrams,
-            };
+            UserId = userId
+        };
 
         await dbContext.Meals.AddAsync(meal);
 
@@ -51,6 +52,7 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
             meal.SubcategoryId,
             meal.IngredientId,
             meal.DefaultQuantityGrams
+            ,meal.UserId!
             );
 
 
@@ -61,7 +63,7 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
 
     public async Task<Result> DeleteAllUserMealAsync(string UserId, CancellationToken cancellationToken = default)
     {
-        var meals = await dbContext.Meals.Where(m => m.UserId == UserId).ToListAsync();
+        var meals = await dbContext.Meals.Where(m => m.UserId == UserId).ToListAsync(cancellationToken: cancellationToken);
 
         if (meals.Count == 0)
             return Result.Failure(new Error("NotFound", "meals for this user not found", StatusCodes.Status404NotFound));
@@ -85,7 +87,7 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
 
     public async Task<Result> DeleteUserMealAsync(string UserId,int mealId, CancellationToken cancellationToken = default)
     {
-        var meal = await dbContext.Meals.FirstOrDefaultAsync(m => m.UserId == UserId && m.Id == mealId);
+        var meal = await dbContext.Meals.FirstOrDefaultAsync(m => m.UserId == UserId && m.Id == mealId, cancellationToken: cancellationToken);
 
         if (meal == null)
             return Result.Failure(new Error("NotFound", "meal with this user id not found", StatusCodes.Status404NotFound));
@@ -112,7 +114,8 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
             meal.AcceptCarb,
             meal.SubcategoryId,
             meal.IngredientId,
-            meal.DefaultQuantityGrams
+            meal.DefaultQuantityGrams,
+            meal.UserId!
             )).ToList();
 
         return Result.Success(response.AsEnumerable());
@@ -139,6 +142,7 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
             meal.SubcategoryId,
             meal.IngredientId,
             meal.DefaultQuantityGrams
+            ,meal.UserId!
             );
         return Result.Success(response);
 
@@ -165,6 +169,7 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
             meal.SubcategoryId,
             meal.IngredientId,
             meal.DefaultQuantityGrams
+            ,meal.UserId!
             );
 
         return Result.Success(response);
@@ -191,7 +196,8 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
             meal.AcceptCarb,
             meal.SubcategoryId,
             meal.IngredientId,
-            meal.DefaultQuantityGrams
+            meal.DefaultQuantityGrams,
+            meal.UserId!
             )).ToList();
         return Result.Success(response.AsEnumerable());
 
@@ -243,7 +249,8 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
             meal.NewCalories,
             meal.NewProtein,
             meal.NewCarbs,
-            meal.NewFats
+            meal.NewFats,
+            meal.UserId!
             );
 
         return Result.Success(response);
@@ -298,6 +305,7 @@ public class MealService(ApplicationDbContext dbContext) : IMealService
             meal.NewProtein,
             meal.NewCarbs,
             meal.NewFats
+            ,meal.UserId!
             );
 
         return Result.Success(response);

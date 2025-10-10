@@ -17,7 +17,8 @@ public record MealResponse
     bool AcceptCarb,
     int SubcategoryId,
     int? IngredientId,
-    decimal? DefaultQuantityGrams
+    decimal? DefaultQuantityGrams,
+    string userId
     );
 public record oldMealResponse
 (
@@ -38,7 +39,8 @@ public record oldMealResponse
  decimal? NewCalories,
  decimal? NewProtein,
  decimal? NewCarbs,
- decimal? NewFats
+ decimal? NewFats, string userId
+
     );
 public record oldMealRequest
 (
