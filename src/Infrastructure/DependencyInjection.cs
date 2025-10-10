@@ -37,6 +37,8 @@ public static class DependencyInjection
         services.AddScoped<IUserPrefernceRepository, UserPrefernceRepository>();
         services.AddScoped<ISystemConfigurationRepository, SystemConfigurationRepository>();
 
+
+
         services
             .AddIdentityCore<User>(o =>
             {
@@ -78,6 +80,8 @@ public static class DependencyInjection
                     ),
                 }
             );
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
 
         services.AddAuthorization();
         services.AddScoped<ICurrentUserService, CurrentUserService>();

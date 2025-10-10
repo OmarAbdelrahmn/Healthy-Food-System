@@ -38,7 +38,9 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasForeignKey(m => m.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.ApplyConfigurationsFromAssembly
+            (typeof(ApplicationDbContext).Assembly);
+        base.OnModelCreating(builder);
+
     }
-
-
 }

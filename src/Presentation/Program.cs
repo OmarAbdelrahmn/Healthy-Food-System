@@ -6,6 +6,7 @@ using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Presentation.Middleware;
 using Presentation.Seeding.Foods;
 using Presentation.Seeding.Identity;
 using Presentation.Seeding.PromoCode;
@@ -26,6 +27,11 @@ builder.Services.AddCors(opt =>
         }
     );
 });
+
+//--------------------
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
 
 builder
     .Services.AddControllers()
@@ -134,6 +140,7 @@ if (args.Length > 0 && (args[0] == "seedAll" || args[0] == "seed"))
 {
     Environment.Exit(0);
 }
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.MapControllers();
 

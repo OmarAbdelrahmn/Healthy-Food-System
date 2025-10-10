@@ -16,4 +16,5 @@ public interface IRepository<TEntity, TKey>
     Task<bool> ExistsAsync(TKey id);
     Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate = null);
     IQueryable<TEntity> GetQueryable();
+    //Task GetByCodeAsync(string code, CancellationToken cancellationToken = default);
 }

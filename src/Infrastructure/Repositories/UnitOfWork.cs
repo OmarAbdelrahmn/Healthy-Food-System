@@ -1,3 +1,4 @@
+using Application.Interfaces;
 using Application.Interfaces.UnitOfWorkInterfaces;
 using Domain.Models.Entities;
 using Infrastructure.Data;
@@ -24,6 +25,14 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;
+        PromoCodes = new PromoCodeRepository (context);
+    }
+
+    public IPomoCodeRepository PromoCodes { get; }
+
+    public async Task<int> SaveChangesAsync (CancellationToken cancellationToken = default)
+    {
+        return await _context.SaveChangesAsync(cancellationToken);
     }
 
 
