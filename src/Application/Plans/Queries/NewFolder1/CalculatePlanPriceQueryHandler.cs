@@ -73,7 +73,7 @@ public class CalculatePlanPriceQueryHandler
         {
             var promo = (await _unitOfWork.PromoCodes.FindAsync(p => p.Code == request.PromoCode)).FirstOrDefault();
 
-            if (promo == null || !promo.IsActive || promo.ExpiryDate < DateTime.UtcNow)
+            if (promo == null || !promo.IsActive || promo.ValidTo < DateTime.UtcNow)
             {
                 return Error.Validation("PromoCode.Is.InValid", $"The PromoCode '{request.PromoCode}'is InValid");
             }
@@ -81,9 +81,9 @@ public class CalculatePlanPriceQueryHandler
             {
 
                     if (promo.DiscountType == DiscountType.Percentage)
-                        discountAmount = total * (promo.DiscountValue / 100m);
+                        discountAmount = total * (promo.DiscountAmount / 100m);
                     else
-                        discountAmount = promo.DiscountValue;
+                        discountAmount = promo.DiscountAmount;
 
                     total -= discountAmount;    
                 

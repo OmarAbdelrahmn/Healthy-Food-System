@@ -21,7 +21,7 @@ public class PlaceSubscriptionCommandHandler : IRequestHandler<PlaceSubscription
         if (request.PromoCodeId.HasValue)
         {
             promo = await _unitOfWork.PromoCodes.GetByIdAsync(request.PromoCodeId.Value);
-            if (promo is null || !promo.IsActive || promo.ExpiryDate < DateTime.UtcNow)
+            if (promo is null || !promo.IsActive || promo.ValidTo < DateTime.UtcNow)
             {
                 return Error.Validation("PromoCode.InvalidOrExpired", "Invalid or expired promo code.");
             }

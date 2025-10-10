@@ -1,6 +1,7 @@
 using System.Text;
 using Application.Interfaces;
 using Application.Interfaces.UnitOfWorkInterfaces;
+using Domain.Interfaces.Repositories;
 using Domain.Models.Entities;
 using Domain.Models.Identity;
 using Infrastructure.Data;
@@ -78,6 +79,8 @@ public static class DependencyInjection
                     ),
                 }
             );
+
+        services.AddScoped<IPromoCodeRepository, PromoCodeRepository>();
 
         services.AddAuthorization();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
