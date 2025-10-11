@@ -57,4 +57,9 @@ public class PromoCodeRepository : IPromoCodeRepository
         return await _context.PromoCodes
             .AnyAsync(pc => pc.Code == code);
     }
+
+    public Task SaveChangesAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

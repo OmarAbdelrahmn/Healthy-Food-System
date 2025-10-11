@@ -81,7 +81,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // =================================================
-builder.Services.AddInfrastructure(builder.Configuration);
+//builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddLogging();
 builder.Services.AddCors( options =>
 {
