@@ -11,6 +11,7 @@ using Infrastructure.JwtAuthentication;
 using Infrastructure.Repositories;
 using Infrastructure.Service;
 using Infrastructure.Service.ingrediant;
+using Infrastructure.Service.subscri;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,7 @@ public static class DependencyInjection
         services.AddScoped<IMealService,MealService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserPrefernceRepository, UserPrefernceRepository>();
+        services.AddScoped<ISubscriptionService, SubscriptionService>();
         services.AddScoped<IIngredientService, IngredientService>();
         services.AddScoped<ISystemConfigurationRepository, SystemConfigurationRepository>();
 

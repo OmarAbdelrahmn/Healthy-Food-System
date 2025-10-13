@@ -41,7 +41,12 @@ builder
     });
 
 builder.Services.AddSwaggerGen(c =>
+
+
 {
+
+    c.CustomSchemaIds(type => type.FullName);
+
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

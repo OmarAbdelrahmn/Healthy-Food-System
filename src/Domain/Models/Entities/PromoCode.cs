@@ -14,13 +14,13 @@ public class PromoCode
     public string? OwnerUserId { get; set; }
     public ICollection<PromoCodeUsage> Usages { get; set; } = new List<PromoCodeUsage>();
 
-    public decimal DiscountAmount { get; private set; }
-    public decimal DiscountPercentage { get; private set; }
-    public DateTime ValidFrom { get; private set; }
-    public DateTime ValidTo { get; private set; }
-    public int MaxUsageCount { get; private set; }
-    public int CurrentUsageCount { get; private set; }
-    public decimal MinimumOrderAmount { get; private set; }
+    public decimal DiscountAmount { get; set; }
+    public decimal DiscountPercentage { get; set; }
+    public DateTime ValidFrom { get; set; }
+    public DateTime ValidTo { get;  set; }
+    public int MaxUsageCount { get;  set; }
+    public int CurrentUsageCount { get;  set; }
+    public decimal MinimumOrderAmount { get; set; }
 
     private PromoCode() { }
     public PromoCode(string code, decimal discountAmount, decimal discountPercentage,
