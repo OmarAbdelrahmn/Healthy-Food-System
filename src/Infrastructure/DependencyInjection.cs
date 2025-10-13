@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Application.Interfaces.UnitOfWorkInterfaces;
 using Application.Mapping;
 using Application.Services;
+using AutoMapper;
 using Domain.Interfaces.Repositories;
 using Domain.Models.Entities;
 using Domain.Models.Identity;
@@ -9,6 +10,7 @@ using Infrastructure.Data;
 using Infrastructure.JwtAuthentication;
 using Infrastructure.Repositories;
 using Infrastructure.Service;
+using Infrastructure.Service.ingrediant;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +18,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
-using AutoMapper;
-
 using System.Text;
 
 namespace Infrastructure;
@@ -44,6 +44,7 @@ public static class DependencyInjection
         services.AddScoped<IMealService,MealService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserPrefernceRepository, UserPrefernceRepository>();
+        services.AddScoped<IIngredientService, IngredientService>();
         services.AddScoped<ISystemConfigurationRepository, SystemConfigurationRepository>();
 
         services

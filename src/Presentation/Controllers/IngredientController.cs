@@ -1,53 +1,78 @@
 
+using Infrastructure.Service.ingrediant;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
-public class IngredientController : Controller
+public class IngredientController(IIngredientService service) : Controller
 {
-    private readonly ISender _mediator;
+    private readonly IIngredientService _service = service;
 
-    public IngredientController(ISender mediator)
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
     {
-        _mediator = mediator;
+        var result = await _service.GetAllAsync();
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
 
-    //[HttpGet]
-    //public async Task<IActionResult> GetIngredients([FromQuery] GetIngredientsQuery query)
-    //{
-    //    var result = await _mediator.Send(query);
-    //    return result.Match<IActionResult>(Ok, BadRequest);
-    //}
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var result = await _service.GetByIdAsync(id);
 
-    //[HttpPost]
-    //public async Task<IActionResult> UpdateIngredient([FromBody] CreateIngredientCommand command)
-    //{
-    //    var result = await _mediator.Send(command);
-    //    return result.Match<IActionResult>(Ok, BadRequest);
-    //}
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
 
-    //[HttpPut]
-    //public async Task<IActionResult> UpdateIngredient([FromBody] UpdateIngredientCommand command)
-    //{
-    //    var result = await _mediator.Send(command);
-    //    return result.Match<IActionResult>(Ok, BadRequest);
-    //}
+    }
 
-    //[HttpDelete("{id:int}")]
-    //public async Task<IActionResult> DeleteIngredient([FromRoute] int id)
-    //{
-    //    var command = new DeleteIngredientCommand(id);
-    //    var result = await _mediator.Send(command);
-    //    return result.Match<IActionResult>(Ok, BadRequest);
-    //}
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] IngredientCreateDto createDto)
+    {
+        var result = await _service.CreateAsync(createDto);
 
-    //[HttpGet("change")]
-    //public async Task<IActionResult> GetChange([FromQuery] GetIngredientsChangesQuery query)
-    //{
-    //    var result = await _mediator.Send(query);
-    //    return result.Match<IActionResult>(Ok, BadRequest);
-    //}
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+    }
+
+    [HttpPut("")]
+
+    public async Task<IActionResult> Update( [FromBody] IngredientUpdateDto updateDto)
+    {
+
+        var result = await _service.UpdateAsync(updateDto);
+
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+    }
+
+    [HttpDelete("{id}")]
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        var result = await _service.DeleteAsync(id);
+
+        return result.IsSuccess ? Ok() : result.ToProblem();
+
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] string term)
+    {
+        var result = await _service.SearchAsync(term);
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+    }
+
+    [HttpGet("{id}/nutrition")]
+
+    public async Task<IActionResult> GetNutritionSummary(int id, [FromQuery] decimal servingSize = 100)
+    {
+        var result = await _service.GetNutritionSummaryAsync(id, servingSize);
+
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+    }
+
 }
