@@ -25,6 +25,8 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<ReferralCode> ReferralCodes { get; set; }
     public DbSet<UserPrefernce> UserPrefernces { get; set; }
     public DbSet<SubscriptionCategory> SubscriptionCategories { get; set; }
+    public DbSet<SupportTicket> SupportTickets { get; set; }
+    public DbSet<SupportMessage> SupportMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
