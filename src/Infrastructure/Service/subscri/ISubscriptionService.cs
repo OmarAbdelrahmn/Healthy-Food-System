@@ -22,5 +22,6 @@ public interface ISubscriptionService
     Task<bool> UnfreezeSubscriptionAsync(string userId);
     Task<bool> IsFrozenAsync(string userId);
     Task<UserSubscriptionStatusDto> GetFreezeStatusAsync(string userId);
+    Task<List<UserSubscriptionStatusDto>> GetAllFrozenUsersAsync();
     Task<int> GetFrozenSubscriptionsCountAsync();
 }

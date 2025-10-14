@@ -279,6 +279,19 @@ public class SubscriptionController(ISubscriptionService subscriptionService) : 
             return StatusCode(500, new { message = "Error retrieving frozen count", error = ex.Message });
         }
     }
+    [HttpGet("frozen/users")]
+    public async Task<ActionResult<List<UserSubscriptionStatusDto>>> GetAllFrozenUsers()
+    {
+        try
+        {
+            var frozenUsers = await _subscriptionService.GetAllFrozenUsersAsync();
+            return Ok(frozenUsers);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error retrieving frozen users", error = ex.Message });
+        }
+    }
 }
 
 // Request Models

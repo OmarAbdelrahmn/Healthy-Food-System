@@ -101,6 +101,52 @@ public class SubscriptionService(ApplicationDbContext context) : ISubscriptionSe
         };
     }
 
+    public async Task<List<UserSubscriptionStatusDto>> GetAllFrozenUsersAsync()
+    {
+        // Get all users who have frozen subscriptions
+        var frozenUserIds = await _context.Subscriptions
+            .Where(s => s.IsPaused && s.IsCurrent)
+            .Select(s => s.UserId)
+            .Distinct()
+            .ToListAsync();
+
+        var allUsersStatus = new List<UserSubscriptionStatusDto>();
+
+        foreach (var userId in frozenUserIds)
+        {
+            var subscriptions = await _context.Subscriptions
+                .Include(s => s.Plan)
+                .Include(s => s.PromoCode)
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            var subscriptionStatusList = subscriptions.Select(s => new SubscriptionStatusDto
+            {
+                SubscriptionId = s.Id,
+                PlanId = s.PlanId,
+                PlanName = s.Plan?.Name ?? "Unknown",
+                IsFrozen = s.IsPaused,
+                IsCurrent = s.IsCurrent,
+                StartDate = s.StartDate,
+                DaysRemaining = (int)s.DaysLeft,
+                MealsRemaining = (int)s.LunchMealsLeft,
+                CarbGrams = (int)s.CarbGrams,
+                TotalPrice = s.GetTotalPrice(),
+                PromoCode = s.PromoCode?.Code
+            }).ToList();
+
+            allUsersStatus.Add(new UserSubscriptionStatusDto
+            {
+                UserId = userId,
+                Subscriptions = subscriptionStatusList,
+                TotalSubscriptions = subscriptions.Count,
+                FrozenSubscriptions = subscriptions.Count(s => s.IsPaused),
+                ActiveSubscriptions = subscriptions.Count(s => s.IsCurrent && !s.IsPaused)
+            });
+        }
+
+        return allUsersStatus;
+    }
     public async Task<CustomerDetailsDtos> GetCustomerByIdAsync(Guid id)
     {
         var subscription = await _context.Subscriptions
