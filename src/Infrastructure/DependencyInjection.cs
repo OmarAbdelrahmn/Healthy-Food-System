@@ -11,6 +11,7 @@ using Infrastructure.JwtAuthentication;
 using Infrastructure.Repositories;
 using Infrastructure.Service;
 using Infrastructure.Service.ingrediant;
+using Infrastructure.Service.qrcode;
 using Infrastructure.Service.subscri;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -47,6 +48,7 @@ public static class DependencyInjection
         services.AddScoped<IUserPrefernceRepository, UserPrefernceRepository>();
         services.AddScoped<ISubscriptionService, SubscriptionService>();
         services.AddScoped<IIngredientService, IngredientService>();
+        services.AddScoped<IQRCodeService, QRCodeService>();
         services.AddScoped<ISystemConfigurationRepository, SystemConfigurationRepository>();
 
         services
