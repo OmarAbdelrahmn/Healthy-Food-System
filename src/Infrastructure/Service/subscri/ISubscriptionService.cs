@@ -17,7 +17,6 @@ public interface ISubscriptionService
     Task<bool> ResumeSubscriptionAsync(Guid id);
     Task<List<PromoCodeDto>> GetActivePromoCodesAsync();
     Task<byte[]> ExportCustomersAsync(CustomerFilterDto filter);
-
     Task<bool> FreezeSubscriptionAsync(string userId, string reason = null, DateTime? freezeUntil = null);
     Task<bool> UnfreezeSubscriptionAsync(string userId);
     Task<bool> IsFrozenAsync(string userId);
