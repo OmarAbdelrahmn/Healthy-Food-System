@@ -343,4 +343,106 @@ public class SubscriptionService(ApplicationDbContext context) : ISubscriptionSe
             OwnerUserId = promoCode.OwnerUserId
         };
     }
+
+    public async Task<bool> FreezeSubscriptionAsync(string userId, string reason = null, DateTime? freezeUntil = null)
+    {
+        if (string.IsNullOrEmpty(userId))
+            return false;
+
+        // Get the current active subscription for the user
+        var subscription = await _context.Subscriptions
+            .Where(s => s.UserId == userId && s.IsCurrent)
+            .FirstOrDefaultAsync();
+
+        if (subscription == null)
+            return false;
+
+        // Check if already frozen
+        if (subscription.IsPaused)
+            return false;
+
+        // Freeze the subscription
+        subscription.IsPaused = true;
+
+        _context.Subscriptions.Update(subscription);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> UnfreezeSubscriptionAsync(string userId)
+    {
+        if (string.IsNullOrEmpty(userId))
+            return false;
+
+        // Get the current frozen subscription for the user
+        var subscription = await _context.Subscriptions
+            .Where(s => s.UserId == userId && s.IsCurrent && s.IsPaused)
+            .FirstOrDefaultAsync();
+
+        if (subscription == null)
+            return false;
+
+        // Unfreeze the subscription
+        subscription.IsPaused = false;
+
+        _context.Subscriptions.Update(subscription);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> IsFrozenAsync(string userId)
+    {
+        if (string.IsNullOrEmpty(userId))
+            return false;
+
+        return await _context.Subscriptions
+            .AnyAsync(s => s.UserId == userId && s.IsCurrent && s.IsPaused);
+    }
+
+    public async Task<UserSubscriptionStatusDto> GetFreezeStatusAsync(string userId)
+    {
+        if (string.IsNullOrEmpty(userId))
+            return null;
+
+        var subscriptions = await _context.Subscriptions
+            .Include(s => s.Plan)
+            .Include(s => s.PromoCode)
+            .Where(s => s.UserId == userId)
+            .ToListAsync();
+
+        if (!subscriptions.Any())
+            return null;
+
+        var subscriptionStatusList = subscriptions.Select(s => new SubscriptionStatusDto
+        {
+            SubscriptionId = s.Id,
+            PlanId = s.PlanId,
+            PlanName = s.Plan?.Name ?? "Unknown",
+            IsFrozen = s.IsPaused,
+            IsCurrent = s.IsCurrent,
+            StartDate = s.StartDate,
+            DaysRemaining = (int)s.DaysLeft,
+            MealsRemaining = (int)s.LunchMealsLeft,
+            CarbGrams = (int)s.CarbGrams,
+            TotalPrice = s.GetTotalPrice(),
+            PromoCode = s.PromoCode?.Code
+        }).ToList();
+
+        return new UserSubscriptionStatusDto
+        {
+            UserId = userId,
+            Subscriptions = subscriptionStatusList,
+            TotalSubscriptions = subscriptions.Count,
+            FrozenSubscriptions = subscriptions.Count(s => s.IsPaused),
+            ActiveSubscriptions = subscriptions.Count(s => s.IsCurrent && !s.IsPaused)
+        };
+    }
+
+    public async Task<int> GetFrozenSubscriptionsCountAsync()
+    {
+        return await _context.Subscriptions
+            .CountAsync(s => s.IsPaused && s.IsCurrent);
+    }
 }

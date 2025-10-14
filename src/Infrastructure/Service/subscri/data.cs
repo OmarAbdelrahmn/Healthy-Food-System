@@ -85,10 +85,37 @@ public class CreateCustomerDto
     public uint CarbGrams { get; set; }
     public DateTime StartDate { get; set; }
     public Guid? PromoCodeId { get; set; }
-
-
-
-
-
   
+}
+
+
+public class FreezeSubscriptionDto
+{
+    public string UserId { get; set; }
+    public string Reason { get; set; }
+    public DateTime? FreezeUntil { get; set; }
+}
+
+public class UserSubscriptionStatusDto
+{
+    public string UserId { get; set; }
+    public List<SubscriptionStatusDto> Subscriptions { get; set; } = new();
+    public int TotalSubscriptions { get; set; }
+    public int FrozenSubscriptions { get; set; }
+    public int ActiveSubscriptions { get; set; }
+}
+
+public class SubscriptionStatusDto
+{
+    public Guid SubscriptionId { get; set; }
+    public Guid PlanId { get; set; }
+    public string PlanName { get; set; }
+    public bool IsFrozen { get; set; }
+    public bool IsCurrent { get; set; }
+    public DateTime StartDate { get; set; }
+    public int DaysRemaining { get; set; }
+    public int MealsRemaining { get; set; }
+    public int CarbGrams { get; set; }
+    public decimal TotalPrice { get; set; }
+    public string PromoCode { get; set; }
 }

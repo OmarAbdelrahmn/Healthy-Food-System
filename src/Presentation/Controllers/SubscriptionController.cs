@@ -177,5 +177,115 @@ public class SubscriptionController(ISubscriptionService subscriptionService) : 
             return StatusCode(500, new { message = "Error exporting customers", error = ex.Message });
         }
     }
+
+    [HttpPost("user/{userId}/freeze")]
+    public async Task<ActionResult> FreezeSubscription(string userId, [FromBody] FreezeRequest request)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest(new { message = "User ID is required" });
+
+            var success = await _subscriptionService.FreezeSubscriptionAsync(
+                userId,
+                request?.Reason,
+                request?.FreezeUntil
+            );
+
+            if (!success)
+                return BadRequest(new { message = "No active subscription found for this user or subscription already frozen" });
+
+            return Ok(new { message = $"Subscription for user {userId} frozen successfully" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error freezing subscription", error = ex.Message });
+        }
+    }
+
+    // POST: api/subscriptionfreeze/user/{userId}/unfreeze
+    [HttpPost("user/{userId}/unfreeze")]
+    public async Task<ActionResult> UnfreezeSubscription(string userId)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest(new { message = "User ID is required" });
+
+            var success = await _subscriptionService.UnfreezeSubscriptionAsync(userId);
+
+            if (!success)
+                return BadRequest(new { message = "No frozen subscription found for this user" });
+
+            return Ok(new { message = $"Subscription for user {userId} unfrozen successfully" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error unfreezing subscription", error = ex.Message });
+        }
+    }
+
+    // GET: api/subscriptionfreeze/user/{userId}/status
+    [HttpGet("user/{userId}/status")]
+    public async Task<ActionResult<UserSubscriptionStatusDto>> GetUserSubscriptionStatus(string userId)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest(new { message = "User ID is required" });
+
+            var status = await _subscriptionService.GetFreezeStatusAsync(userId);
+
+            if (status == null)
+                return NotFound(new { message = "No subscriptions found for this user" });
+
+            return Ok(status);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error retrieving subscription status", error = ex.Message });
+        }
+    }
+
+    // GET: api/subscriptionfreeze/user/{userId}/isfrozen
+    [HttpGet("user/{userId}/isfrozen")]
+    public async Task<ActionResult<bool>> IsUserSubscriptionFrozen(string userId)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest(new { message = "User ID is required" });
+
+            var isFrozen = await _subscriptionService.IsFrozenAsync(userId);
+            return Ok(new { userId, isFrozen });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error checking freeze status", error = ex.Message });
+        }
+    }
+
+    // GET: api/subscriptionfreeze/frozen/count
+    [HttpGet("frozen/count")]
+    public async Task<ActionResult<int>> GetFrozenCount()
+    {
+        try
+        {
+            var count = await _subscriptionService.GetFrozenSubscriptionsCountAsync();
+            return Ok(new { frozenSubscriptionsCount = count });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error retrieving frozen count", error = ex.Message });
+        }
+    }
 }
+
+// Request Models
+public class FreezeRequest
+{
+    public string Reason { get; set; }
+    public DateTime? FreezeUntil { get; set; }
+}
+
 
